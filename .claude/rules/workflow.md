@@ -9,7 +9,7 @@
 ### Step 1 — Audit source files
 
 Read only what you need:
-- `pages/index.html` — scan `<main>` for section HTML comment markers
+- `pages/*.html` — scan `<main>` in each file for section HTML comment markers
 - `components/` — list all `.html` files; classify each as a **section file** or a **structural component**
 
 **Classifying `components/` files:**
@@ -46,7 +46,7 @@ Pending: narrative, cta, testimonials
 For each pending section:
 
 **3a. Read the section HTML**
-- If the section came from `pages/index.html` — locate it by its HTML comment marker inside `<main>`
+- If the section came from `pages/` — locate it in the relevant file by its HTML comment marker inside `<main>`
 - If the section came from `components/[name].html` — read that file directly
 
 Understand the full structure before writing anything.

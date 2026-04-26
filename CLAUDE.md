@@ -12,7 +12,7 @@ This ruleset converts static HTML layouts (sections) into WordPress theme files 
 
 ## Workflow overview
 
-1. **Audit** `pages/index.html` + all `.html` files in `components/` — identify flexible sections and structural files (header, footer, nav)
+1. **Audit** all `.html` files in `pages/` and `components/` — identify flexible sections and structural files (header, footer, nav)
 2. **Scope** — check `wp-theme/template-parts/flexible/` for already-done sections
 3. **Scan for structural duplicates** — before processing, identify identical sections; use ONE layout + Select modifier instead of two separate layouts
 4. **Process** each pending section one at a time: PHP part → JSON block → verify
@@ -31,7 +31,7 @@ Full step details: `.claude/rules/workflow.md`
 | ACF JSON (single file) | `wp-theme/acf-json/group_flexible_content.json` |
 
 Static source HTML lives in:
-- `pages/index.html` — flexible sections inside `<main>`, identified by HTML comment markers
+- `pages/*.html` — flexible sections inside `<main>`, identified by HTML comment markers
 - `components/*.html` — may contain additional section files (one file = one section) and/or structural files (header, footer, nav)
 
 ---

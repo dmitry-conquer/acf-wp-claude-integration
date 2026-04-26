@@ -8,7 +8,7 @@ A Claude Code ruleset for converting static HTML layouts into WordPress theme fi
 
 Drop this ruleset into any WordPress project. Point Claude Code at your static HTML source, and it will:
 
-- Detect flexible sections from HTML comment markers in `pages/index.html` and individual files in `components/`
+- Detect flexible sections from HTML comment markers in `pages/*.html` and individual files in `components/`
 - Map every hardcoded value to the correct ACF field type
 - Write PHP template parts with proper escaping and WordPress patterns
 - Build `group_flexible_content.json` with all flexible layouts
@@ -66,7 +66,7 @@ Your project must have:
 
 ```
 pages/
-  index.html             ← sections inside <main>, each with <!-- Comment Marker -->
+  *.html                 ← sections inside <main>, each with <!-- Comment Marker -->
 
 components/              ← optional; may contain:
   header.html            ←   structural files (not flexible sections)
