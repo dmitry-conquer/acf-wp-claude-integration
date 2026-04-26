@@ -1,6 +1,6 @@
 # acf-wp-integration
 
-A Claude Code ruleset for converting static HTML layouts (sections, header, footer) into WordPress theme files with **ACF Pro Flexible Content** field groups.
+A Claude Code ruleset for converting static HTML layouts into WordPress theme files with **ACF Pro Flexible Content** field groups and a Theme Settings options page.
 
 ---
 
@@ -8,11 +8,12 @@ A Claude Code ruleset for converting static HTML layouts (sections, header, foot
 
 Drop this ruleset into any WordPress project. Point Claude Code at your static HTML source, and it will:
 
-- Detect all flexible sections from HTML comment markers
+- Detect flexible sections from HTML comment markers in `pages/index.html` and individual files in `components/`
 - Map every hardcoded value to the correct ACF field type
 - Write PHP template parts with proper escaping and WordPress patterns
-- Build a single valid `group_flexible_content.json` with all layouts
-- Convert the header and footer to WordPress partials with `wp_nav_menu()`
+- Build `group_flexible_content.json` with all flexible layouts
+- Integrate header, footer, and nav into WordPress via existing walker functions
+- Create a `group_theme_settings.json` (ACF options page) for editable header/footer content
 
 ---
 
@@ -33,19 +34,16 @@ Drop this ruleset into any WordPress project. Point Claude Code at your static H
 acf-wp-integration/
 ├── CLAUDE.md                        ← Claude Code entry point (always loaded)
 ├── PROMPT.md                        ← Copy-paste prompt for starting a session
-├── .claude/
-│   ├── rules/
-│   │   ├── workflow.md              ← Step-by-step integration process
-│   │   ├── acf-fields.md            ← Field type decision table
-│   │   ├── acf-json.md              ← JSON structure & key naming rules
-│   │   └── php-patterns.md          ← PHP escaping, loops, nav patterns
-│   └── commands/
-│       ├── integrate.md             ← /integrate — full run
-│       ├── section.md               ← /section [name] — single section
-│       └── audit-json.md            ← /audit-json — validate JSON
-└── docs/
-    ├── source-structure.md          ← Required project file layout
-    └── troubleshooting.md           ← Common issues and fixes
+└── .claude/
+    ├── rules/
+    │   ├── workflow.md              ← Step-by-step integration process
+    │   ├── acf-fields.md            ← Field type decision table
+    │   ├── acf-json.md              ← JSON structure & key naming rules
+    │   └── php-patterns.md          ← PHP escaping, loops, nav patterns
+    └── commands/
+        ├── integrate.md             ← /integrate — full run
+        ├── section.md               ← /section [name] — single section
+        └── audit-json.md            ← /audit-json — validate JSON
 ```
 
 ---
@@ -67,18 +65,21 @@ Then copy or symlink `CLAUDE.md` to your project root and `.claude/` to `.claude
 Your project must have:
 
 ```
-source/
-  pages/index.html       ← sections inside <main>, each with <!-- Comment Marker -->
-  components/header.html
-  components/footer.html
+pages/
+  index.html             ← sections inside <main>, each with <!-- Comment Marker -->
+
+components/              ← optional; may contain:
+  header.html            ←   structural files (not flexible sections)
+  footer.html
+  hero.html              ←   individual section files (one file = one layout)
+  services.html
 
 wp-theme/
   templates/flexible.php
-  acf-json/
+  acf-json/              ← group_flexible_content.json + group_theme_settings.json
   template-parts/flexible/
+  inc/                   ← nav walker class(es)
 ```
-
-See `docs/source-structure.md` for full details.
 
 ### 3. Start Claude Code
 
@@ -103,7 +104,7 @@ Or use slash commands:
 
 **Token-efficient** — rule files are loaded on demand, not all upfront. Claude reads only what it needs for the current step.
 
-**One JSON file** — all ACF layouts live in `group_flexible_content.json`. No split files, no sync conflicts.
+**Two JSON files** — flexible layouts in `group_flexible_content.json`, theme-wide settings in `group_theme_settings.json`. No per-layout files, no sync conflicts.
 
 **Strict conventions** — layout names in `snake_case`, `"required"` never set, `return_format` always explicit. Auditable and reproducible across projects and contributors.
 
